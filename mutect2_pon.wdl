@@ -12,8 +12,7 @@ version 1.0
 #  which the wdl hard-codes to 0 because GenpmicsDBImport can't handle MNPs
 
 #import "mutect2.wdl" as m2
-
-import "https://raw.githubusercontent.com/gatk-workflows/gatk4-somatic-snvs-indels/2.6.0/mutect2.wdl" as m2
+import "https://raw.githubusercontent.com/microsoft/gatk4-somatic-snvs-indels-azure/az2.7.0/mutect2.wdl" as m2
 
 workflow Mutect2_Panel {
   input {
@@ -91,6 +90,7 @@ workflow Mutect2_Panel {
             call CreatePanel {
                 input:
                     input_vcfs = Mutect2.filtered_vcf,
+                    input_vcfs_idx = Mutect2.filtered_vcf_idx,
                     intervals = subintervals,
                     ref_fasta = ref_fasta,
                     ref_fai = ref_fai,
@@ -123,7 +123,8 @@ workflow Mutect2_Panel {
 task CreatePanel {
     input {
       File intervals
-      Array[String] input_vcfs
+      Array[File] input_vcfs
+      Array[File] input_vcfs_idx
       File ref_fasta
       File ref_fai
       File ref_dict
@@ -156,10 +157,8 @@ task CreatePanel {
 
     runtime {
         docker: runtime_params.gatk_docker
-        bootDiskSizeGb: runtime_params.boot_disk_size
         memory: machine_mem + " GB"
-        disks: "local-disk " + runtime_params.disk + " HDD"
-        preemptible: runtime_params.preemptible
+        disk: runtime_params.disk + " GB"
         maxRetries: runtime_params.max_retries
         cpu: runtime_params.cpu
     }

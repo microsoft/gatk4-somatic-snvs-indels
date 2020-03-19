@@ -1,10 +1,32 @@
-# somatic-snvs-indels
+# Somatic short variant analysis pipeline on Azure
+This repository is an example of running the somatic short variant analysis pipeline, based on [Best Practices Data Pre-processing Pipeline by Broad Institute of MIT and Harvard](https://gatk.broadinstitute.org/hc/en-us/articles/360035894731-Somatic-short-variant-discovery-SNVs-Indels-), on Cromwell on Azure.<br/> 
+
+Learn more about using Azure for your Cromwell WDL workflows on our GitHub repo! - [Cromwell on Azure](https://github.com/microsoft/CromwellOnAzure).<br/>
+
+This repository is a fork from [the original](https://github.com/gatk-workflows/gatk4-somatic-snvs-indels) and has all the required changes to run the WDL workflow on Cromwell on Azure.<br/>
+
+Here, you can find the WDL files and an example inputs JSON files with links to data hosted on a public Azure Storage account. You can use the "msgenpublicdata" storage account directly as a relative path, like in the inputs JSON files. 
+
+The `mutect2.inputs.json` and `mutect2_pon.inputs.json` trigger files are ready to use. 
+
+### Host tutorial data on your Storage account
+If you prefer to host this data on your own Storage account, you can use [AzCopy](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-blobs#copy-a-container-to-another-storage-account) to transfer the entire blob container with the required files to your own Storage account [using a shared access signature](https://docs.microsoft.com/en-us/azure/storage/common/storage-sas-overview) with "Write" access.<br/>
+
+```
+.\azcopy.exe copy 'https://msgenpublicdata.blob.core.windows.net:443/inputs?sv=2015-04-05&sr=c&si=coa&sig=pENt%2FMMOj24uoNBZIPLa%2BNVVkvopcFK51rwADyYLEPE%3D' 'https://<destination-storage-account-name>.blob.core.windows.net/inputs?<WriteSAS-token>' --recursive --s2s-preserve-access-tier=false
+```
+
+Replace all instances of `/msgenpublicdata/inputs/` with your `/destination-storage-account-name/inputs/` in the inputs JSON file.
+
+The `mutect2.inputs.json` and `mutect2_pon.inputs.json` trigger files are examples. Substitute the "WorkflowInputsUrl" with the http link to your inputs JSON file hosted on your Storage account.
+
+## somatic-snvs-indels
 
 ### Purpose : 
 Workflows for somatic short variant analysis with GATK4. 
 
 ### mutect2 :
-Implements Somatic short variant discovery using [GATK Best Practices](https://software.broadinstitute.org/gatk/best-practices/workflow).  
+Implements Somatic short variant discovery using [GATK Best Practices](https://gatk.broadinstitute.org/hc/en-us/articles/360035894731-Somatic-short-variant-discovery-SNVs-Indels-).  
 
 #### Requirements/expectations
 - Tumor bam and index
@@ -26,14 +48,6 @@ Creates a Panel of Norms to be implemented in somatic short variant discovery.
 - PON vcf and index
 - Normal calls vcf and index
 
-### mutect2-normal-normal :
-Used to validate mutect2 workflow.
-
-#### Requirements/expectations
-- One analysis-ready BAM file (and its index) for each replicate
-
-#### Outputs
-- False Positive VCF files and its index with summary  
      
 ### Software version requirements :
 - GATK4.1.4.0 
@@ -100,9 +114,7 @@ By default the M2 WDL runs Funcotator for functional annotation and produce a TC
 - More information about Funcotator can be found at: https://gatkforums.broadinstitute.org/dsde/discussion/11193/funcotator-information-and-tutorial/ 
 
 ### Important Note :
-- Runtime parameters are optimized for Broad's Google Cloud Platform implementation.
-- For help running workflows on the Google Cloud Platform or locally please
-view the following tutorial [(How to) Execute Workflows from the gatk-workflows Git Organization](https://software.broadinstitute.org/gatk/documentation/article?id=12521).
+- The provided JSON is meant to be a ready to use example JSON template of the workflow. It is the user’s responsibility to correctly set the reference and resource input variables. 
 - The following material is provided by the GATK Team. Please post any questions or concerns to one of our forum sites : [GATK](https://gatkforums.broadinstitute.org/gatk/categories/ask-the-team/) , [Terra](https://support.terra.bio/hc/en-us/community/topics/360000500432) , [WDL/Cromwell](https://gatkforums.broadinstitute.org/wdl/categories/ask-the-wdl-team).
 - Please visit the [User Guide](https://software.broadinstitute.org/gatk/documentation/) site for further documentation on our workflows and tools.
 

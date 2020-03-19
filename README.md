@@ -1,5 +1,5 @@
 # Somatic short variant analysis pipeline on Azure
-This repository is an example of running the somatic short variant analysis pipeline, based on [Best Practices Data Pre-processing Pipeline by Broad Institute of MIT and Harvard](https://gatk.broadinstitute.org/hc/en-us/articles/360035894731-Somatic-short-variant-discovery-SNVs-Indels-), on Cromwell on Azure.<br/> 
+This repository is an example of running the somatic short variant analysis pipeline, based on [Best Practices Somatic Short Variant Discovery Pipeline by Broad Institute of MIT and Harvard](https://gatk.broadinstitute.org/hc/en-us/articles/360035894731-Somatic-short-variant-discovery-SNVs-Indels-), on Cromwell on Azure.<br/> 
 
 Learn more about using Azure for your Cromwell WDL workflows on our GitHub repo! - [Cromwell on Azure](https://github.com/microsoft/CromwellOnAzure).<br/>
 
@@ -18,7 +18,7 @@ If you prefer to host this data on your own Storage account, you can use [AzCopy
 
 Replace all instances of `/msgenpublicdata/inputs/` with your `/destination-storage-account-name/inputs/` in the inputs JSON file.
 
-The `mutect2.inputs.json` and `mutect2_pon.inputs.json` trigger files are examples. Substitute the "WorkflowInputsUrl" with the http link to your inputs JSON file hosted on your Storage account.
+The `mutect2.json` and `mutect2_pon.json` trigger files are examples. Substitute the "WorkflowInputsUrl" with the http link to your inputs JSON file hosted on your Storage account.
 
 ## somatic-snvs-indels
 

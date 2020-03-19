@@ -60,9 +60,9 @@ Cromwell version support
 #### mutect2 (single pair/sample)  
 - ``Mutect2.gatk4_jar`` -- Location *within the docker file* of the GATK4 jar file.  If you wish you to use a different jar file, such as one on your local filesystem or a google bucket, specify that location with ``Mutect2_Multi.gatk4_jar_override``.  This parameter is ignored if ``Mutect2_Multi.gatk4_jar_override`` is specified.
 - ``Mutect2.intervals`` -- A file listing genomic intervals to search for somatic mutations.  This should be in the standard GATK4 format.
-- ``Mutect2.ref_fasta`` 	-- reference fasta.  In google bucket:  ``gs://gatk-best-practices/somatic-b37/Homo_sapiens_assembly19.fasta``
-- ``Mutect2.ref_fasta_index`` -- In google bucket:  ``gs://gatk-best-practices/somatic-b37/Homo_sapiens_assembly19.fasta.fai``
-- ``Mutect2.ref_dict`` -- In google bucket:  ``gs://gatk-best-practices/somatic-b37/Homo_sapiens_assembly19.dict``
+- ``Mutect2.ref_fasta`` 	-- reference fasta.  In public Azure Storage account  ``/msgenpublicdata/inputs/gatk-best-practices/somatic-b37/Homo_sapiens_assembly19.fasta``
+- ``Mutect2.ref_fasta_index`` -- In public Azure Storage account:  ``/msgenpublicdata/inputs/gatk-best-practices/somatic-b37/Homo_sapiens_assembly19.fasta.fai``
+- ``Mutect2.ref_dict`` -- In public Azure Storage account:  ``/msgenpublicdata/inputs/gatk-best-practices/somatic-b37/Homo_sapiens_assembly19.dict``
 - ``Mutect2.tumor_bam`` -- File path or storage location (depending on backend) of the tumor bam file.
 - ``Mutect2.tumor_bam_index`` -- File path or storage location (depending on backend) of the tumor bam file index.
 - ``Mutect2.normal_bam`` -- (optional) File path or storage location (depending on backend) of the normal bam file.
@@ -80,7 +80,7 @@ Cromwell version support
 - ``Mutect2.oncotator_docker`` -- (optional)  A GATK4 jar file to be used instead of the jar file in the docker image.  (See ``Mutect2_Multi.gatk4_jar``)  This can be very useful for developers.  Please note that you need to be careful that the docker image you use is compatible with the GATK4 jar file given here -- no automated checks are made.
 - ``Mutect2.gatk4_jar_override`` -- (optional)  A GATK4 jar file to be used instead of the jar file in the docker image.  (See ``Mutect2_Multi.gatk4_jar``)  This can be very useful for developers.  Please note that you need to be careful that the docker image you use is compatible with the GATK4 jar file given here 
 - ``Mutect2.preemptible_attempts`` -- Number of times to attempt running a task on a preemptible VM.  This is only used for cloud backends in cromwell and is ignored for local and SGE backends.
-- ``Mutect2.onco_ds_tar_gz`` -- (optional)  A tar.gz file of the oncotator datasources -- often quite large (>15GB).  This will be uncompressed as part of the oncotator task.  Depending on backend used, this can be specified as a path on the local filesystem of a cloud storage container (e.g. gs://...).  Typically the Oncotator default datasource can be downloaded at ``ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/oncotator/``.  Do not put the FTP URL into the json file.
+- ``Mutect2.onco_ds_tar_gz`` -- (optional)  A tar.gz file of the oncotator datasources -- often quite large (>15GB).  This will be uncompressed as part of the oncotator task.  Depending on backend used, this can be specified as a path on the local filesystem of a cloud storage container.  Typically the Oncotator default datasource can be downloaded at ``ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/oncotator/``.  Do not put the FTP URL into the json file.
 - ``Mutect2.onco_ds_local_db_dir`` -- "(optional)  A direct path to the Oncotator datasource directory (uncompressed).  While this is the fastest approach, it cannot be used with docker unless your docker image already has the datasources in it.  For cromwell backends without docker, this can be a local filesystem path.  *This cannot be a cloud storage location*
 
  Note:  If neither ``Mutect2_Multi.onco_ds_tar_gz``, nor ``Mutect2_Multi.onco_ds_local_db_dir``, is specified, the Oncotator task will download and uncompress for each execution.

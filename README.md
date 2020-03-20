@@ -7,7 +7,7 @@ This repository is a fork from [the original](https://github.com/gatk-workflows/
 
 Here, you can find the WDL files and an example inputs JSON files with links to data hosted on a public Azure Storage account. You can use the "msgenpublicdata" storage account directly as a relative path, like in the inputs JSON files. 
 
-The `mutect2.inputs.json` and `mutect2_pon.inputs.json` trigger files are ready to use. 
+The `mutect2.trigger.json` and `mutect2_pon.trigger.json` trigger files are ready to use. 
 
 ### Host tutorial data on your Storage account
 If you prefer to host this data on your own Storage account, you can use [AzCopy](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-blobs#copy-a-container-to-another-storage-account) to transfer the entire blob container with the required files to your own Storage account [using a shared access signature](https://docs.microsoft.com/en-us/azure/storage/common/storage-sas-overview) with "Write" access.<br/>
@@ -18,7 +18,7 @@ If you prefer to host this data on your own Storage account, you can use [AzCopy
 
 Replace all instances of `/msgenpublicdata/inputs/` with your `/destination-storage-account-name/inputs/` in the inputs JSON file.
 
-The `mutect2.json` and `mutect2_pon.json` trigger files are examples. Substitute the "WorkflowInputsUrl" with the http link to your inputs JSON file hosted on your Storage account.
+The `mutect2.trigger.json` and `mutect2_pon.trigger.json` files are examples. Substitute the "WorkflowInputsUrl" with the http link to your inputs JSON file hosted on your Storage account.
 
 ## somatic-snvs-indels
 

@@ -358,6 +358,9 @@ workflow Mutect2 {
     if (defined(realignment_index_bundle)) {
         call FilterAlignmentArtifacts {
             input:
+                ref_fasta = ref_fasta,
+                ref_fai = ref_fai,
+                ref_dict = ref_dict,
                 bam = tumor_bam,
                 bai = tumor_bai,
                 realignment_index_bundle = select_first([realignment_index_bundle]),
@@ -449,7 +452,7 @@ task CramToBam {
     runtime {
         docker: "us.gcr.io/broad-gotc-prod/genomes-in-the-cloud:2.3.3-1513176735"
         memory: machine_mem + " MB"
-        disks: "local-disk " + disk_size + " HDD"
+        disk: disk_size + " GB"
     }
 
     output {
@@ -487,10 +490,8 @@ task SplitIntervals {
 
     runtime {
         docker: runtime_params.gatk_docker
-        bootDiskSizeGb: runtime_params.boot_disk_size
         memory: runtime_params.machine_mem + " MB"
-        disks: "local-disk " + runtime_params.disk + " HDD"
-        preemptible: runtime_params.preemptible
+        disk: runtime_params.disk + " GB"
         maxRetries: runtime_params.max_retries
         cpu: runtime_params.cpu
     }
@@ -597,7 +598,6 @@ task M2 {
         m2_exit_code=$?
 
         ### GetPileupSummaries
-
         # If the variants for contamination and the intervals for this scatter don't intersect, GetPileupSummaries
         # throws an error.  However, there is nothing wrong with an empty intersection for our purposes; it simply doesn't
         # contribute to the merged pileup summaries that we create downstream.  We implement this by with array outputs.
@@ -620,10 +620,8 @@ task M2 {
 
     runtime {
         docker: gatk_docker
-        bootDiskSizeGb: 12
         memory: machine_mem + " MB"
-        disks: "local-disk " + select_first([disk_space, 100]) + if use_ssd then " SSD" else " HDD"
-        preemptible: select_first([preemptible, 10])
+        disk: select_first([disk_space, 100]) + " GB"
         maxRetries: select_first([max_retries, 0])
         cpu: select_first([cpu, 1])
     }
@@ -663,10 +661,8 @@ task MergeVCFs {
 
     runtime {
         docker: runtime_params.gatk_docker
-        bootDiskSizeGb: runtime_params.boot_disk_size
         memory: runtime_params.machine_mem + " MB"
-        disks: "local-disk " + runtime_params.disk + " HDD"
-        preemptible: runtime_params.preemptible
+        disk: runtime_params.disk + " GB"
         maxRetries: runtime_params.max_retries
         cpu: runtime_params.cpu
     }
@@ -707,10 +703,8 @@ task MergeBamOuts {
 
     runtime {
         docker: runtime_params.gatk_docker
-        bootDiskSizeGb: runtime_params.boot_disk_size
         memory: runtime_params.machine_mem + " MB"
-        disks: "local-disk " + select_first([disk_space, runtime_params.disk]) + " HDD"
-        preemptible: runtime_params.preemptible
+        disk:  select_first([disk_space, runtime_params.disk]) + " GB"
         maxRetries: runtime_params.max_retries
         cpu: runtime_params.cpu
     }
@@ -732,16 +726,15 @@ task MergeStats {
         set -e
         export GATK_LOCAL_JAR=~{default="/root/gatk.jar" runtime_params.gatk_override}
 
+
         gatk --java-options "-Xmx~{runtime_params.command_mem}m" MergeMutectStats \
             -stats ~{sep=" -stats " stats} -O merged.stats
     }
 
     runtime {
         docker: runtime_params.gatk_docker
-        bootDiskSizeGb: runtime_params.boot_disk_size
         memory: runtime_params.machine_mem + " MB"
-        disks: "local-disk " + runtime_params.disk + " HDD"
-        preemptible: runtime_params.preemptible
+        disk: runtime_params.disk + " GB"
         maxRetries: runtime_params.max_retries
         cpu: runtime_params.cpu
     }
@@ -771,10 +764,8 @@ task MergePileupSummaries {
 
     runtime {
         docker: runtime_params.gatk_docker
-        bootDiskSizeGb: runtime_params.boot_disk_size
         memory: runtime_params.machine_mem + " MB"
-        disks: "local-disk " + runtime_params.disk + " HDD"
-        preemptible: runtime_params.preemptible
+        disk: runtime_params.disk + " GB"
         maxRetries: runtime_params.max_retries
         cpu: runtime_params.cpu
     }
@@ -806,10 +797,8 @@ task LearnReadOrientationModel {
 
     runtime {
         docker: runtime_params.gatk_docker
-        bootDiskSizeGb: runtime_params.boot_disk_size
         memory: machine_mem + " MB"
-        disks: "local-disk " + runtime_params.disk + " HDD"
-        preemptible: runtime_params.preemptible
+        disk: runtime_params.disk + " GB"
         maxRetries: runtime_params.max_retries
         cpu: runtime_params.cpu
     }
@@ -839,10 +828,8 @@ task CalculateContamination {
 
     runtime {
         docker: runtime_params.gatk_docker
-        bootDiskSizeGb: runtime_params.boot_disk_size
         memory: runtime_params.machine_mem + " MB"
-        disks: "local-disk " + runtime_params.disk + " HDD"
-        preemptible: runtime_params.preemptible
+        disk: runtime_params.disk + " GB"
         maxRetries: runtime_params.max_retries
         cpu: runtime_params.cpu
     }
@@ -900,10 +887,8 @@ task Filter {
 
     runtime {
         docker: runtime_params.gatk_docker
-        bootDiskSizeGb: runtime_params.boot_disk_size
         memory: runtime_params.machine_mem + " MB"
-        disks: "local-disk " + select_first([disk_space, runtime_params.disk]) + " HDD"
-        preemptible: runtime_params.preemptible
+        disk: select_first([disk_space, runtime_params.disk]) + " GB"
         maxRetries: runtime_params.max_retries
         cpu: runtime_params.cpu
     }
@@ -917,6 +902,9 @@ task Filter {
 
 task FilterAlignmentArtifacts {
     input {
+      File ref_fasta
+      File ref_fai
+      File ref_dict
       File input_vcf
       File input_vcf_idx
       File bam
@@ -936,6 +924,9 @@ task FilterAlignmentArtifacts {
     Int command_mem = machine_mem - 500
 
     parameter_meta{
+      ref_fasta: {localization_optional: true}
+      ref_fai: {localization_optional: true}
+      ref_dict: {localization_optional: true}
       input_vcf: {localization_optional: true}
       input_vcf_idx: {localization_optional: true}
       bam: {localization_optional: true}
@@ -950,6 +941,7 @@ task FilterAlignmentArtifacts {
         gatk --java-options "-Xmx~{command_mem}m" FilterAlignmentArtifacts \
             -V ~{input_vcf} \
             -I ~{bam} \
+            -R ~{ref_fasta} \
             --bwa-mem-index-image ~{realignment_index_bundle} \
             ~{realignment_extra_args} \
             -O ~{output_vcf}
@@ -957,10 +949,8 @@ task FilterAlignmentArtifacts {
 
     runtime {
         docker: runtime_params.gatk_docker
-        bootDiskSizeGb: runtime_params.boot_disk_size
         memory: machine_mem + " MB"
-        disks: "local-disk " + runtime_params.disk + " HDD"
-        preemptible: runtime_params.preemptible
+        disk: runtime_params.disk + " GB"
         maxRetries: runtime_params.max_retries
         cpu: runtime_params.cpu
     }
@@ -1089,10 +1079,8 @@ task Funcotate {
 
     runtime {
         docker: runtime_params.gatk_docker
-        bootDiskSizeGb: runtime_params.boot_disk_size
         memory: runtime_params.machine_mem + " MB"
-        disks: "local-disk " + select_first([disk_space, runtime_params.disk]) + " HDD"
-        preemptible: runtime_params.preemptible
+        disk: select_first([disk_space, runtime_params.disk]) + " GB"
         maxRetries: runtime_params.max_retries
         cpu: runtime_params.cpu
     }

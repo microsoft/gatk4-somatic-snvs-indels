@@ -3,16 +3,16 @@
   "Mutect2_Panel.normal_bams":"Array[String]",
   "Mutect2_Panel.normal_bais":"Array[String]",
 
-  "Mutect2_Panel.ref_fasta":"/msgenpublicdata/inputs/gatk-best-practices/somatic-b37/Homo_sapiens_assembly19.fasta",
-  "Mutect2_Panel.ref_fai":"/msgenpublicdata/inputs/gatk-best-practices/somatic-b37/Homo_sapiens_assembly19.fasta.fai",
-  "Mutect2_Panel.ref_dict":"/msgenpublicdata/inputs/gatk-best-practices/somatic-b37/Homo_sapiens_assembly19.dict",
+  "Mutect2_Panel.ref_fasta":"/datasettestinputs/dataset/references/hg19/Homo_sapiens_assembly19.fasta",
+  "Mutect2_Panel.ref_fai":"/datasettestinputs/dataset/references/hg19/Homo_sapiens_assembly19.fasta.fai",
+  "Mutect2_Panel.ref_dict":"/datasettestinputs/dataset/references/hg19/Homo_sapiens_assembly19.dict",
   "Mutect2_Panel.scatter_count":10,
 
-  "Mutect2_Panel.intervals":"/msgenpublicdata/inputs/gatk-best-practices/somatic-b37/whole_exome_agilent_1.1_refseq_plus_3_boosters.Homo_sapiens_assembly19.baits.interval_list",
-  "Mutect2_Panel.Mutect2.variants_for_contamination":"/msgenpublicdata/inputs/gatk-best-practices/somatic-b37/small_exac_common_3.vcf",
-  "Mutect2_Panel.Mutect2.variants_for_contamination_idx":"/msgenpublicdata/inputs/gatk-best-practices/somatic-b37/small_exac_common_3.vcf.idx",
-  "Mutect2_Panel.gnomad":"/msgenpublicdata/inputs/gatk-best-practices/somatic-b37/af-only-gnomad.raw.sites.vcf",
-  "Mutect2_Panel.gnomad_idx":"/msgenpublicdata/inputs/gatk-best-practices/somatic-b37/af-only-gnomad.raw.sites.vcf.idx",
+  "Mutect2_Panel.intervals":"/datasettestinputs/dataset/references/hg19/whole_exome_agilent_1.1_refseq_plus_3_boosters.Homo_sapiens_assembly19.baits.interval_list",
+  "Mutect2_Panel.Mutect2.variants_for_contamination":"/datasettestinputs/dataset/gatk4-somatic-snvs-indels/small_exac_common_3.vcf",
+  "Mutect2_Panel.Mutect2.variants_for_contamination_idx":"/datasettestinputs/dataset/gatk4-somatic-snvs-indels/small_exac_common_3.vcf.idx",
+  "Mutect2_Panel.gnomad":"/datasettestinputs/dataset/gatk4-somatic-snvs-indels/af-only-gnomad.raw.sites.vcf",
+  "Mutect2_Panel.gnomad_idx":"/datasettestinputs/dataset/gatk4-somatic-snvs-indels/af-only-gnomad.raw.sites.vcf.idx",
 
   "Mutect2_Panel.gatk_docker":"broadinstitute/gatk:4.1.4.1"
 }

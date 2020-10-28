@@ -5,20 +5,9 @@ Learn more about using Azure for your Cromwell WDL workflows on our GitHub repo!
 
 This repository is a fork from [the original](https://github.com/gatk-workflows/gatk4-somatic-snvs-indels) and has all the required changes to run the WDL workflow on Cromwell on Azure.<br/>
 
-Here, you can find the WDL files and an example inputs JSON files with links to data hosted on a public Azure Storage account. You can use the "msgenpublicdata" storage account directly as a relative path, like in the inputs JSON files. 
+Here, you can find the WDL files and an example inputs JSON files with links to data hosted on a public Azure Storage account. You can use the "datasettestinputs" storage account directly as a relative path, like in the inputs JSON files.
 
-The `mutect2.trigger.json` and `mutect2_pon.trigger.json` trigger files are ready to use. 
-
-### Host tutorial data on your Storage account
-If you prefer to host this data on your own Storage account, you can use [AzCopy](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-blobs#copy-a-container-to-another-storage-account) to transfer the entire blob container with the required files to your own Storage account [using a shared access signature](https://docs.microsoft.com/en-us/azure/storage/common/storage-sas-overview) with "Write" access.<br/>
-
-```
-.\azcopy.exe copy 'https://msgenpublicdata.blob.core.windows.net:443/inputs?sv=2015-04-05&sr=c&si=coa&sig=pENt%2FMMOj24uoNBZIPLa%2BNVVkvopcFK51rwADyYLEPE%3D' 'https://<destination-storage-account-name>.blob.core.windows.net/inputs?<WriteSAS-token>' --recursive --s2s-preserve-access-tier=false
-```
-
-Replace all instances of `/msgenpublicdata/inputs/` with your `/destination-storage-account-name/inputs/` in the inputs JSON file.
-
-The `mutect2.trigger.json` and `mutect2_pon.trigger.json` files are examples. Substitute the "WorkflowInputsUrl" with the http link to your inputs JSON file hosted on your Storage account.
+The `mutect2.trigger.json` and `mutect2_pon.trigger.json` trigger files are ready to use. You can start the workflow on your instance of Cromwell on Azure, using [these instructions](https://github.com/microsoft/CromwellOnAzure/blob/master/docs/managing-your-workflow.md/#Start-your-workflow).
 
 ## somatic-snvs-indels
 
